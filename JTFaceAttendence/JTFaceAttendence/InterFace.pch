@@ -1,0 +1,49 @@
+//
+//  InterFace.pch
+//  JTFaceAttendence
+//
+//  Created by lj on 2021/6/17.
+//
+
+#ifndef InterFace_pch
+#define InterFace_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#import <IDLFaceSDK/IDLFaceSDK.h>
+#import <AFNetworking/AFNetworking.h>
+#import <SVProgressHUD/SVProgressHUD.h>
+#import <MJExtension/MJExtension.h>
+#import <SDWebImage/SDWebImage.h>
+#import <ReactiveObjC/ReactiveObjC.h>
+#import "Masonry.h"
+#import "BaseNavigationController.h"
+#import "AdminInfo.h"
+#import "UIColor+Tool.h"
+#import "UIView+Tool.h"
+#import "JTFaceImageAttendenceManager.h"
+#import "UUIDManager.h"
+//域名
+#define Base_Url @"http://192.168.0.82:14002"
+
+//pc端注册人脸
+#define POST_ADDFACEID @"/v1/pc/registerFace"
+//pad端人脸考勤
+#define POST_FACEATTENDENCE @"/v1/pc/findFaceAndAttendance"
+
+
+#define kScreenWidth UIScreen.mainScreen.bounds.size.width
+#define kScreenHeight UIScreen.mainScreen.bounds.size.height
+#define HEX_ThemeColor HEX_COLOR(@"#2E96F7")
+#define HEX_COLOR(color) [UIColor colorFromHexCode:color]
+
+#define USER_DEFAULTS [NSUserDefaults standardUserDefaults]
+#define APPWINDOW [[UIApplication sharedApplication] delegate].window
+//
+#define FACE_LICENSE_ID @"JTNSLKFJGS32LLN9-face-ios"
+// 人脸license文件名
+#define FACE_LICENSE_NAME    @"idl-license"
+
+// 人脸license后缀
+#define FACE_LICENSE_SUFFIX  @"face-ios"
+#endif /* InterFace_pch */
