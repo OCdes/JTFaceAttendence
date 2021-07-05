@@ -44,7 +44,7 @@
 #define USER_DEFAULTS [NSUserDefaults standardUserDefaults]
 #define APPWINDOW [[UIApplication sharedApplication] delegate].window
 //
-#define FACE_LICENSE_ID @"JTNSLKFJGS32LLN9-face-ios"
+#define FACE_LICENSE_ID @"JT-M-FACE-face-ios"
 // 人脸license文件名
 #define FACE_LICENSE_NAME    @"idl-license"
 
