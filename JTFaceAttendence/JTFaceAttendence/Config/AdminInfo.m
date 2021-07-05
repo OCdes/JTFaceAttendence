@@ -50,7 +50,7 @@ static AdminInfo *_instance = nil;
 }
 
 - (void)setPlaceKey:(NSString *)placeKey {
-    [USER_DEFAULTS setObject:placeKey forKey:@"placeKey"];
+    [USER_DEFAULTS setObject:placeKey ? placeKey : @"" forKey:@"placeKey"];
 }
 
 - (NSString *)placeKey {
@@ -58,7 +58,7 @@ static AdminInfo *_instance = nil;
 }
 
 - (void)setPlaceName:(NSString *)placeName {
-    [USER_DEFAULTS setObject:placeName forKey:@"placeName"];
+    [USER_DEFAULTS setObject:placeName ? placeName : @"" forKey:@"placeName"];
 }
 
 - (NSString *)placeName {

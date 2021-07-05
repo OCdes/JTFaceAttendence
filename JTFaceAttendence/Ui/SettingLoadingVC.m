@@ -56,8 +56,8 @@
         if (![code isEqualToNumber:@(0)]) {
             [SVProgressHUD showErrorWithStatus:msg];
         } else {
-            [AdminInfo shareInfo].placeKey = dataDict[@"appKey"];
-            [AdminInfo shareInfo].placeName = dataDict[@"placeName"];
+            [AdminInfo shareInfo].placeKey = [dataDict objectForKey:@"appKey"];
+            [AdminInfo shareInfo].placeName = [dataDict objectForKey:@"placeName"];
         }
         APPWINDOW.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:[[VedioCheckViewController alloc] init]];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
