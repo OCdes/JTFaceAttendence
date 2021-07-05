@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *emp_name, *emp_position, *emp_department;
 
+@property (nonatomic, strong) NSString *placeKey, *placeName;
+
 + (AdminInfo *)shareInfo;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "BDFaceDetectionViewController.h"
 #import <IDLFaceSDK/IDLFaceSDK.h>
-#import <AVFoundation/AVFoundation.h>
+//#import <AVFoundation/AVFoundation.h>
 #import "BDFaceSuccessViewController.h"
 #import "BDFaceImageShow.h"
 

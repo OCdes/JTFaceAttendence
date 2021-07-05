@@ -15,18 +15,20 @@
 #import "BDFaceImageShow.h"
 #import "AttendenceViewModel.h"
 #import "EmpCard.h"
+#import "AudioManager.h"
 
 @interface VedioCheckViewController () <CaptureDataOutputProtocol> {
     CGRect rectFrame;
     BOOL isPaint;
     UIImageView * newImage;
+    NSDateFormatter *formatter;
 }
 
 @property (nonatomic, readwrite, retain) UIImageView *displayImageView;
 
 @property (nonatomic, readwrite, retain) BDFaceVideoCaptureDevice *videoCapture;
 
-@property (nonatomic, readwrite, retain) UILabel * remindDetailLabel, *empNameLa, *departmenLa, *timeLa, *statusLa;
+@property (nonatomic, readwrite, retain) UILabel * remindDetailLabel, *empNameLa, *departmenLa, *timeLa, *statusLa, *placeNameLa;
 
 @property (nonatomic, strong) ProfileView *pv;
 
@@ -78,18 +80,23 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppWillResignAction) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     self.viewModel = [[AttendenceViewModel alloc] init];
+    formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
     @weakify(self);
     [self.viewModel.suceessSubject subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         EmpInfoModel *model = [JTFaceImageAttendenceManager sharedInstance].lastEmpModel;
         self.empNameLa.text = [NSString stringWithFormat:@"姓名:%@",model.empName];
         self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",model.empDepartmentName];
-        self.timeLa.text = [NSString stringWithFormat:@"时间:%@",[NSDate date]];
+        
+        self.timeLa.text = [NSString stringWithFormat:@"时间:%@",[self->formatter stringFromDate:[NSDate date]]];
         [self setStatusText:x status:YES];
+        [[AudioManager shareInstance] attendenceSuccess];
     }];
     [self.viewModel.failureSubject subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         [self setStatusText:x status:NO];
+        [[AudioManager shareInstance] attendenceFailuer];
     }];
     [self setNav];
     [self initView];
@@ -302,12 +309,19 @@
     bottomLine.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:bottomLine];
     
+    self.placeNameLa = [[UILabel alloc] initWithFrame:bottomLine.frame];
+    self.placeNameLa.textColor = HEX_COLOR(@"#ffffff");
+    self.placeNameLa.font = [UIFont systemFontOfSize:20];
+    self.placeNameLa.textAlignment = NSTextAlignmentCenter;
+    self.placeNameLa.text = [AdminInfo shareInfo].placeName;
+    [self.view addSubview:self.placeNameLa];
+    
     UIImageView *infoV = [[UIImageView alloc] initWithFrame:CGRectMake(borderRect.origin.x, CGRectGetMaxY(borderRect)+37, borderRect.size.width, 136)];//empInfobg
     infoV.image = [UIImage imageNamed:@"empInfobg"];
     infoV.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:infoV];
     
-    self.empNameLa = [[UILabel alloc] initWithFrame:CGRectMake(66, 49, borderRect.size.width/2, 25)];
+    self.empNameLa = [[UILabel alloc] initWithFrame:CGRectMake(66, 51, borderRect.size.width/2, 25)];
     self.empNameLa.textColor = HEX_COLOR(@"#ffffff");
     self.empNameLa.text = @"姓名：";
     self.empNameLa.font = [UIFont boldSystemFontOfSize:16];
@@ -328,9 +342,15 @@
     deviceID.font = [UIFont boldSystemFontOfSize:14];
     deviceID.textAlignment = NSTextAlignmentCenter;
     deviceID.text = [NSString stringWithFormat:@"设备号：%@",[UUIDManager getUUID]];
+    deviceID.userInteractionEnabled = YES;
+    [deviceID addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyUDID)]];
     [self.view addSubview:deviceID];
-    self.pv = [[ProfileView alloc
-                ] init];
+}
+
+- (void)copyUDID {
+    UIPasteboard *board = [UIPasteboard generalPasteboard];
+    [board setString:[UUIDManager getUUID]];
+    [SVProgressHUD showSuccessWithStatus:@"已复制"];
 }
 
 - (void)setNav {

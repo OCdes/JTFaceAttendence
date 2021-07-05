@@ -49,6 +49,22 @@ static AdminInfo *_instance = nil;
     [USER_DEFAULTS setObject:avatarUrl forKey:@"avatarUrl"];
 }
 
+- (void)setPlaceKey:(NSString *)placeKey {
+    [USER_DEFAULTS setObject:placeKey forKey:@"placeKey"];
+}
+
+- (NSString *)placeKey {
+    return [USER_DEFAULTS objectForKey:@"placeKey"];
+}
+
+- (void)setPlaceName:(NSString *)placeName {
+    [USER_DEFAULTS setObject:placeName forKey:@"placeName"];
+}
+
+- (NSString *)placeName {
+    return [USER_DEFAULTS objectForKey:@"placeName"];
+}
+
 + (AdminInfo *)shareInfo {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

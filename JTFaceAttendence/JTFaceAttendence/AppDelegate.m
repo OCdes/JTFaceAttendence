@@ -8,6 +8,7 @@
 #import "AppDelegate.h"
 #import "VedioCheckViewController.h"
 #import "ConfigManager.h"
+#import "SettingLoadingVC.h"
 @interface AppDelegate ()
 
 @end
@@ -19,7 +20,8 @@
     // Override point for customization after application launch.
     [[ConfigManager manager] registerSDK];
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    self.window.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:[[VedioCheckViewController alloc] init]];
+    
+    self.window.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:[[SettingLoadingVC alloc] init]];
     [self.window makeKeyAndVisible];
     [self removeLaunchScreenCacheIfNeeded];
     return YES;

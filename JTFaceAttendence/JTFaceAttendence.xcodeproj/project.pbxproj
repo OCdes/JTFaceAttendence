@@ -26,6 +26,10 @@
 		2A51AAF2268B1E6B00B5E6F1 /* idl-key.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 2A51AAEC268B1E6B00B5E6F1 /* idl-key.face-ios */; };
 		2A51AAF5268B213B00B5E6F1 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A51AAF4268B213B00B5E6F1 /* libc++.tbd */; settings = {ATTRIBUTES = (Required, ); }; };
 		2A51AAF9268B246E00B5E6F1 /* VedioCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A51AAF8268B246E00B5E6F1 /* VedioCheckViewController.m */; };
+		2A54BC992692A78200FDCB88 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A54BC982692A78200FDCB88 /* AudioManager.m */; };
+		2A54BCA02692D0BB00FDCB88 /* NSDictionary+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A54BC9F2692D0BB00FDCB88 /* NSDictionary+Log.m */; };
+		2A54BCA82692E17E00FDCB88 /* attendenceFailure.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2A54BCA72692E17E00FDCB88 /* attendenceFailure.mp3 */; };
+		2A54BCAA2692E19300FDCB88 /* attendenceSuccess.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2A54BCA92692E19300FDCB88 /* attendenceSuccess.mp3 */; };
 		2A84390E267B4CB300210DDE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A84390D267B4CB300210DDE /* AppDelegate.m */; };
 		2A843919267B4CB800210DDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A843918267B4CB800210DDE /* Assets.xcassets */; };
 		2A84391F267B4CB800210DDE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A84391E267B4CB800210DDE /* main.m */; };
@@ -144,6 +148,12 @@
 		2A51AAF4268B213B00B5E6F1 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		2A51AAF7268B246E00B5E6F1 /* VedioCheckViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VedioCheckViewController.h; sourceTree = "<group>"; };
 		2A51AAF8268B246E00B5E6F1 /* VedioCheckViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VedioCheckViewController.m; sourceTree = "<group>"; };
+		2A54BC972692A78200FDCB88 /* AudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
+		2A54BC982692A78200FDCB88 /* AudioManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioManager.m; sourceTree = "<group>"; };
+		2A54BC9E2692D0BB00FDCB88 /* NSDictionary+Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Log.h"; sourceTree = "<group>"; };
+		2A54BC9F2692D0BB00FDCB88 /* NSDictionary+Log.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Log.m"; sourceTree = "<group>"; };
+		2A54BCA72692E17E00FDCB88 /* attendenceFailure.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = attendenceFailure.mp3; sourceTree = "<group>"; };
+		2A54BCA92692E19300FDCB88 /* attendenceSuccess.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = attendenceSuccess.mp3; sourceTree = "<group>"; };
 		2A843909267B4CB300210DDE /* JTFaceAttendence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JTFaceAttendence.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A84390C267B4CB300210DDE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2A84390D267B4CB300210DDE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -303,6 +313,10 @@
 				2A4E4E80268EEB4A00926142 /* UIView+Tool.h */,
 				2A4E4E87268EEB4A00926142 /* UIView+Tool.m */,
 				2A4E4E88268EEB4A00926142 /* AppKeyChain */,
+				2A54BC972692A78200FDCB88 /* AudioManager.h */,
+				2A54BC982692A78200FDCB88 /* AudioManager.m */,
+				2A54BC9E2692D0BB00FDCB88 /* NSDictionary+Log.h */,
+				2A54BC9F2692D0BB00FDCB88 /* NSDictionary+Log.m */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -397,6 +411,8 @@
 				2A84391D267B4CB800210DDE /* Info.plist */,
 				2A84391E267B4CB800210DDE /* main.m */,
 				2A843946267B555700210DDE /* InterFace.pch */,
+				2A54BCA92692E19300FDCB88 /* attendenceSuccess.mp3 */,
+				2A54BCA72692E17E00FDCB88 /* attendenceFailure.mp3 */,
 			);
 			path = JTFaceAttendence;
 			sourceTree = "<group>";
@@ -729,6 +745,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A54BCA82692E17E00FDCB88 /* attendenceFailure.mp3 in Resources */,
+				2A54BCAA2692E19300FDCB88 /* attendenceSuccess.mp3 in Resources */,
 				2A4E4E95268EFF9300926142 /* LaunchScreen.storyboard in Resources */,
 				2A51AAEF268B1E6B00B5E6F1 /* com.baidu.idl.face.live.action.image.bundle in Resources */,
 				2A51AAF1268B1E6B00B5E6F1 /* com.baidu.idl.face.faceSDK.bundle in Resources */,
@@ -825,6 +843,7 @@
 				2AC87604268C3FB4002D7E28 /* BDFaceRemindAnimationView.m in Sources */,
 				2AC87602268C3FB4002D7E28 /* BDFaceCircleView.m in Sources */,
 				2A4E4E94268EEBC600926142 /* UUIDManager.m in Sources */,
+				2A54BC992692A78200FDCB88 /* AudioManager.m in Sources */,
 				2AC87608268C3FB4002D7E28 /* BDFaceAgreementViewController.m in Sources */,
 				2A4E4E8E268EEB4A00926142 /* ProfileView.m in Sources */,
 				2AC875F5268C3FB4002D7E28 /* BDFaceAdjustParamsController.m in Sources */,
@@ -850,6 +869,7 @@
 				2AC875FD268C3FB4002D7E28 /* BDFaceAdjustParamsFileManager.m in Sources */,
 				2AC875EA268C3FB4002D7E28 /* BDFaceDevice.m in Sources */,
 				2AC875FF268C3FB4002D7E28 /* BDFaceAdjustParamsModel.m in Sources */,
+				2A54BCA02692D0BB00FDCB88 /* NSDictionary+Log.m in Sources */,
 				2AC875F6268C3FB4002D7E28 /* BDFaceAdjustParamsRootController.m in Sources */,
 				2A4E4E90268EEB4A00926142 /* UIView+Tool.m in Sources */,
 				2AC875F2268C3FB4002D7E28 /* BDFaceSelectConfigCell.m in Sources */,

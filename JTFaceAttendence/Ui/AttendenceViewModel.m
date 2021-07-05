@@ -31,7 +31,7 @@
         NSString *intervalStr = [NSString stringWithFormat:@"%.0f",interval*10000];
         //32位随机数
         NSString *nonceStr = [NSString stringWithFormat:@"%ld",(long)(arc4random()*pow(10, 31))];
-        NSString *placeKey = @"ea8df5aa0a1dd7815a70b3cd15e11a4a";
+        NSString *placeKey = [AdminInfo shareInfo].placeKey;
         //sign 签名
         NSString *secretKey = @"7dkc86acd1438f1";
         NSString *paramStr = [NSString stringWithFormat:@"%@%@%@",imgDataStr, intervalStr,nonceStr];

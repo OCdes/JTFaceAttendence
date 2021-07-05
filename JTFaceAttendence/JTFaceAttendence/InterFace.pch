@@ -30,6 +30,10 @@
 #define POST_ADDFACEID @"/v1/pc/registerFace"
 //pad端人脸考勤
 #define POST_FACEATTENDENCE @"/v1/pc/findFaceAndAttendance"
+//pc端文字转语音
+#define POST_EXCHANGEWORDTOAUDIO @"/v1/pc/genAudioDownloadUrl"
+//通过设备获取当前考勤场所信息
+#define POST_GETPLACEINFO @"/v1/pc/faceAttendanceInit"
 
 
 #define kScreenWidth UIScreen.mainScreen.bounds.size.width
