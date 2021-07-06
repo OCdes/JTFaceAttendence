@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AAF9D9DCBEF3574F5AB9AB4 /* libPods-JTFaceAttendence.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7566A14CCAA9A6677103D62D /* libPods-JTFaceAttendence.a */; };
 		2A4E4E8B268EEB4A00926142 /* UIColor+Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4E4E7C268EEB4A00926142 /* UIColor+Tool.m */; };
 		2A4E4E8C268EEB4A00926142 /* NSString+Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4E4E7E268EEB4A00926142 /* NSString+Tool.m */; };
 		2A4E4E8D268EEB4A00926142 /* AdminInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4E4E81268EEB4A00926142 /* AdminInfo.m */; };
@@ -19,10 +20,6 @@
 		2A4E4E98268F184E00926142 /* SettingLoadingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4E4E97268F184E00926142 /* SettingLoadingVC.m */; };
 		2A51AA9A268ACE3B00B5E6F1 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A51AA99268ACE3B00B5E6F1 /* BaseNavigationController.m */; };
 		2A51AAED268B1E6B00B5E6F1 /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 2A51AAE7268B1E6900B5E6F1 /* idl-license.face-ios */; };
-		2A51AAEE268B1E6B00B5E6F1 /* com.baidu.idl.face.model.faceSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2A51AAE8268B1E6900B5E6F1 /* com.baidu.idl.face.model.faceSDK.bundle */; };
-		2A51AAEF268B1E6B00B5E6F1 /* com.baidu.idl.face.live.action.image.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2A51AAE9268B1E6A00B5E6F1 /* com.baidu.idl.face.live.action.image.bundle */; };
-		2A51AAF0268B1E6B00B5E6F1 /* IDLFaceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A51AAEA268B1E6B00B5E6F1 /* IDLFaceSDK.framework */; };
-		2A51AAF1268B1E6B00B5E6F1 /* com.baidu.idl.face.faceSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2A51AAEB268B1E6B00B5E6F1 /* com.baidu.idl.face.faceSDK.bundle */; };
 		2A51AAF2268B1E6B00B5E6F1 /* idl-key.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 2A51AAEC268B1E6B00B5E6F1 /* idl-key.face-ios */; };
 		2A51AAF5268B213B00B5E6F1 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A51AAF4268B213B00B5E6F1 /* libc++.tbd */; settings = {ATTRIBUTES = (Required, ); }; };
 		2A51AAF9268B246E00B5E6F1 /* VedioCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A51AAF8268B246E00B5E6F1 /* VedioCheckViewController.m */; };
@@ -36,16 +33,13 @@
 		2A843929267B4CB800210DDE /* JTFaceAttendenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A843928267B4CB800210DDE /* JTFaceAttendenceTests.m */; };
 		2A843934267B4CB800210DDE /* JTFaceAttendenceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A843933267B4CB800210DDE /* JTFaceAttendenceUITests.m */; };
 		2AA7C0E5268D5CA3006725EF /* AttendenceViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AA7C0E4268D5CA3006725EF /* AttendenceViewModel.m */; };
-		2AA7C0ED268D5FC3006725EF /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0E6268D5FC3006725EF /* libAFNetworking.a */; };
-		2AA7C0EE268D5FC3006725EF /* libDZNEmptyDataSet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0E7268D5FC3006725EF /* libDZNEmptyDataSet.a */; };
-		2AA7C0EF268D5FC3006725EF /* libMasonry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0E8268D5FC3006725EF /* libMasonry.a */; };
-		2AA7C0F0268D5FC3006725EF /* libMJExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0E9268D5FC3006725EF /* libMJExtension.a */; };
-		2AA7C0F1268D5FC3006725EF /* libMJRefresh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0EA268D5FC3006725EF /* libMJRefresh.a */; };
-		2AA7C0F2268D5FC3006725EF /* libReactiveObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0EB268D5FC3006725EF /* libReactiveObjC.a */; };
-		2AA7C0F3268D5FC3006725EF /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0EC268D5FC3006725EF /* libSDWebImage.a */; };
-		2AA7C0FB268D8B8E006725EF /* libSVProgressHUD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA7C0FA268D8B8E006725EF /* libSVProgressHUD.a */; };
 		2AA7C0FE268D8E79006725EF /* JTFaceImageAttendenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AA7C0FD268D8E79006725EF /* JTFaceImageAttendenceManager.m */; };
 		2AA7C101268D9465006725EF /* EmpCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AA7C100268D9465006725EF /* EmpCard.m */; };
+		2AC5A72B26943BC800BC9ECB /* com.baidu.idl.face.faceSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2AC5A72726943BC600BC9ECB /* com.baidu.idl.face.faceSDK.bundle */; };
+		2AC5A72C26943BC800BC9ECB /* IDLFaceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AC5A72826943BC700BC9ECB /* IDLFaceSDK.framework */; };
+		2AC5A72D26943BC800BC9ECB /* com.baidu.idl.face.live.action.image.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2AC5A72926943BC700BC9ECB /* com.baidu.idl.face.live.action.image.bundle */; };
+		2AC5A72E26943BC800BC9ECB /* com.baidu.idl.face.model.faceSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2AC5A72A26943BC800BC9ECB /* com.baidu.idl.face.model.faceSDK.bundle */; };
+		2AC5A73026943C9B00BC9ECB /* IDLFaceSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2AC5A72826943BC700BC9ECB /* IDLFaceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2AC875EA268C3FB4002D7E28 /* BDFaceDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC87595268C3FB3002D7E28 /* BDFaceDevice.m */; };
 		2AC875EB268C3FB4002D7E28 /* BDFaceImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC87598268C3FB3002D7E28 /* BDFaceImageUtils.m */; };
 		2AC875EC268C3FB4002D7E28 /* BDFaceVideoCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC8759B268C3FB3002D7E28 /* BDFaceVideoCaptureDevice.m */; };
@@ -82,8 +76,6 @@
 		2AC8760B268C3FB4002D7E28 /* BDFaceSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC875E2268C3FB4002D7E28 /* BDFaceSuccessViewController.m */; };
 		2AC8760C268C3FB4002D7E28 /* BDFaceAdjustParamsTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC875E4268C3FB4002D7E28 /* BDFaceAdjustParamsTool.m */; };
 		2AC8760D268C3FB4002D7E28 /* BDFaceLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC875E7268C3FB4002D7E28 /* BDFaceLog.m */; };
-		2AC87612268C4595002D7E28 /* IDLFaceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2A51AAEA268B1E6B00B5E6F1 /* IDLFaceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E97A7F3D3429137C0EED43E9 /* libPods-JTFaceAttendence.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7566A14CCAA9A6677103D62D /* libPods-JTFaceAttendence.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,15 +96,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		2AC87611268C4575002D7E28 /* Embed Frameworks */ = {
+		2AC5A72F26943C8600BC9ECB /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2AC87612268C4595002D7E28 /* IDLFaceSDK.framework in Embed Frameworks */,
+				2AC5A73026943C9B00BC9ECB /* IDLFaceSDK.framework in CopyFiles */,
 			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -140,10 +131,6 @@
 		2A51AA98268ACE3B00B5E6F1 /* BaseNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
 		2A51AA99268ACE3B00B5E6F1 /* BaseNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		2A51AAE7268B1E6900B5E6F1 /* idl-license.face-ios */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "idl-license.face-ios"; sourceTree = "<group>"; };
-		2A51AAE8268B1E6900B5E6F1 /* com.baidu.idl.face.model.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.model.faceSDK.bundle; sourceTree = "<group>"; };
-		2A51AAE9268B1E6A00B5E6F1 /* com.baidu.idl.face.live.action.image.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.live.action.image.bundle; sourceTree = "<group>"; };
-		2A51AAEA268B1E6B00B5E6F1 /* IDLFaceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IDLFaceSDK.framework; sourceTree = "<group>"; };
-		2A51AAEB268B1E6B00B5E6F1 /* com.baidu.idl.face.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.faceSDK.bundle; sourceTree = "<group>"; };
 		2A51AAEC268B1E6B00B5E6F1 /* idl-key.face-ios */ = {isa = PBXFileReference; lastKnownFileType = file; path = "idl-key.face-ios"; sourceTree = "<group>"; };
 		2A51AAF4268B213B00B5E6F1 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		2A51AAF7268B246E00B5E6F1 /* VedioCheckViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VedioCheckViewController.h; sourceTree = "<group>"; };
@@ -182,6 +169,10 @@
 		2AA7C0FD268D8E79006725EF /* JTFaceImageAttendenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JTFaceImageAttendenceManager.m; sourceTree = "<group>"; };
 		2AA7C0FF268D9465006725EF /* EmpCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmpCard.h; sourceTree = "<group>"; };
 		2AA7C100268D9465006725EF /* EmpCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmpCard.m; sourceTree = "<group>"; };
+		2AC5A72726943BC600BC9ECB /* com.baidu.idl.face.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.faceSDK.bundle; sourceTree = "<group>"; };
+		2AC5A72826943BC700BC9ECB /* IDLFaceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IDLFaceSDK.framework; sourceTree = "<group>"; };
+		2AC5A72926943BC700BC9ECB /* com.baidu.idl.face.live.action.image.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.live.action.image.bundle; sourceTree = "<group>"; };
+		2AC5A72A26943BC800BC9ECB /* com.baidu.idl.face.model.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.model.faceSDK.bundle; sourceTree = "<group>"; };
 		2AC87595268C3FB3002D7E28 /* BDFaceDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDFaceDevice.m; sourceTree = "<group>"; };
 		2AC87596268C3FB3002D7E28 /* BDFaceImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDFaceImageUtils.h; sourceTree = "<group>"; };
 		2AC87597268C3FB3002D7E28 /* BDFaceDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDFaceDevice.h; sourceTree = "<group>"; };
@@ -265,16 +256,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A51AAF5268B213B00B5E6F1 /* libc++.tbd in Frameworks */,
-				2AA7C0EE268D5FC3006725EF /* libDZNEmptyDataSet.a in Frameworks */,
-				2AA7C0F1268D5FC3006725EF /* libMJRefresh.a in Frameworks */,
-				2AA7C0F0268D5FC3006725EF /* libMJExtension.a in Frameworks */,
-				2A51AAF0268B1E6B00B5E6F1 /* IDLFaceSDK.framework in Frameworks */,
-				2AA7C0F3268D5FC3006725EF /* libSDWebImage.a in Frameworks */,
-				2AA7C0F2268D5FC3006725EF /* libReactiveObjC.a in Frameworks */,
-				2AA7C0EF268D5FC3006725EF /* libMasonry.a in Frameworks */,
-				2AA7C0FB268D8B8E006725EF /* libSVProgressHUD.a in Frameworks */,
-				2AA7C0ED268D5FC3006725EF /* libAFNetworking.a in Frameworks */,
-				E97A7F3D3429137C0EED43E9 /* libPods-JTFaceAttendence.a in Frameworks */,
+				2AC5A72C26943BC800BC9ECB /* IDLFaceSDK.framework in Frameworks */,
+				1AAF9D9DCBEF3574F5AB9AB4 /* libPods-JTFaceAttendence.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,12 +356,12 @@
 		2A843900267B4CB300210DDE = {
 			isa = PBXGroup;
 			children = (
-				2A51AAEB268B1E6B00B5E6F1 /* com.baidu.idl.face.faceSDK.bundle */,
-				2A51AAE9268B1E6A00B5E6F1 /* com.baidu.idl.face.live.action.image.bundle */,
-				2A51AAE8268B1E6900B5E6F1 /* com.baidu.idl.face.model.faceSDK.bundle */,
+				2AC5A72726943BC600BC9ECB /* com.baidu.idl.face.faceSDK.bundle */,
+				2AC5A72926943BC700BC9ECB /* com.baidu.idl.face.live.action.image.bundle */,
+				2AC5A72A26943BC800BC9ECB /* com.baidu.idl.face.model.faceSDK.bundle */,
+				2AC5A72826943BC700BC9ECB /* IDLFaceSDK.framework */,
 				2A51AAEC268B1E6B00B5E6F1 /* idl-key.face-ios */,
 				2A51AAE7268B1E6900B5E6F1 /* idl-license.face-ios */,
-				2A51AAEA268B1E6B00B5E6F1 /* IDLFaceSDK.framework */,
 				2A84390B267B4CB300210DDE /* JTFaceAttendence */,
 				2A843927267B4CB800210DDE /* JTFaceAttendenceTests */,
 				2A843932267B4CB800210DDE /* JTFaceAttendenceUITests */,
@@ -651,8 +634,8 @@
 				2A843905267B4CB300210DDE /* Sources */,
 				2A843906267B4CB300210DDE /* Frameworks */,
 				2A843907267B4CB300210DDE /* Resources */,
-				E4DE27F8A1A29119E16732EB /* [CP] Copy Pods Resources */,
-				2AC87611268C4575002D7E28 /* Embed Frameworks */,
+				98E6AA5E06C425D410F744C7 /* [CP] Copy Pods Resources */,
+				2AC5A72F26943C8600BC9ECB /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -748,10 +731,10 @@
 				2A54BCA82692E17E00FDCB88 /* attendenceFailure.mp3 in Resources */,
 				2A54BCAA2692E19300FDCB88 /* attendenceSuccess.mp3 in Resources */,
 				2A4E4E95268EFF9300926142 /* LaunchScreen.storyboard in Resources */,
-				2A51AAEF268B1E6B00B5E6F1 /* com.baidu.idl.face.live.action.image.bundle in Resources */,
-				2A51AAF1268B1E6B00B5E6F1 /* com.baidu.idl.face.faceSDK.bundle in Resources */,
-				2A51AAEE268B1E6B00B5E6F1 /* com.baidu.idl.face.model.faceSDK.bundle in Resources */,
 				2A51AAED268B1E6B00B5E6F1 /* idl-license.face-ios in Resources */,
+				2AC5A72D26943BC800BC9ECB /* com.baidu.idl.face.live.action.image.bundle in Resources */,
+				2AC5A72B26943BC800BC9ECB /* com.baidu.idl.face.faceSDK.bundle in Resources */,
+				2AC5A72E26943BC800BC9ECB /* com.baidu.idl.face.model.faceSDK.bundle in Resources */,
 				2A51AAF2268B1E6B00B5E6F1 /* idl-key.face-ios in Resources */,
 				2A843919267B4CB800210DDE /* Assets.xcassets in Resources */,
 			);
@@ -796,7 +779,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E4DE27F8A1A29119E16732EB /* [CP] Copy Pods Resources */ = {
+		98E6AA5E06C425D410F744C7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1055,11 +1038,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jtyh.JTWorkAttendance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Debug;
 		};
@@ -1086,10 +1071,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jtyh.JTWorkAttendance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Release;
 		};
