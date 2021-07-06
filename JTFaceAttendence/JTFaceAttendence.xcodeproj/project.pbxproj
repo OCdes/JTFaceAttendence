@@ -361,8 +361,8 @@
 			children = (
 				2A51AAF7268B246E00B5E6F1 /* VedioCheckViewController.h */,
 				2A51AAF8268B246E00B5E6F1 /* VedioCheckViewController.m */,
-				2AA7C0E3268D5CA3006725EF /* AttendenceViewModel.h */,
 				2AA7C0E4268D5CA3006725EF /* AttendenceViewModel.m */,
+				2AA7C0E3268D5CA3006725EF /* AttendenceViewModel.h */,
 				2A4E4E96268F184E00926142 /* SettingLoadingVC.h */,
 				2A4E4E97268F184E00926142 /* SettingLoadingVC.m */,
 				2AC87592268C3FB3002D7E28 /* BDFaceFaceSDKUI */,
