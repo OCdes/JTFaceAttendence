@@ -2,7 +2,7 @@
 //  InterFace.pch
 //  JTFaceAttendence
 //
-//  Created by lj on 2021/6/17.
+//  Created by 袁炳生 on 2021/7/7.
 //
 
 #ifndef InterFace_pch
@@ -10,6 +10,7 @@
 
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
 #import <IDLFaceSDK/IDLFaceSDK.h>
 #import <AFNetworking/AFNetworking.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -24,7 +25,7 @@
 #import "JTFaceImageAttendenceManager.h"
 #import "UUIDManager.h"
 //域名
-#define Base_Url @"https://reapi.hzjtyh.com"//http://192.168.0.82:14002
+#define Base_Url @"https://reapi.hzjtyh.com"//"http://192.168.0.82:14002"
 
 //pc端注册人脸
 #define POST_ADDFACEID @"/v1/pc/registerFace"
@@ -40,7 +41,7 @@
 #define kScreenHeight UIScreen.mainScreen.bounds.size.height
 #define HEX_ThemeColor HEX_COLOR(@"#2E96F7")
 #define HEX_COLOR(color) [UIColor colorFromHexCode:color]
-
+#define APP_VER        [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"]
 #define USER_DEFAULTS [NSUserDefaults standardUserDefaults]
 #define APPWINDOW [[UIApplication sharedApplication] delegate].window
 //
@@ -50,4 +51,20 @@
 
 // 人脸license后缀
 #define FACE_LICENSE_SUFFIX  @"face-ios"
+
+// DLog
+#ifdef  DEBUG
+#define DLog(fmt,...) {NSLog((@"%s [Line:%d]" fmt),__PRETTY_FUNCTION__,__LINE__,##__VA_ARGS__);}
+#else
+#define DLog(...)
+#endif
+
+#define NSStringFormate(fmt,...) [NSString stringWithFormat:fmt,##__VA_ARGS__]
+
+typedef enum : NSUInteger {
+    CommonStatus,
+    PoseStatus,
+    occlusionStatus
+} WarningStatus;
+
 #endif /* InterFace_pch */

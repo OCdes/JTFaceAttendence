@@ -17,7 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *emp_name, *emp_position, *emp_department;
 
+@property (nonatomic, assign) BOOL hasAgree;
+
 @property (nonatomic, strong) NSString *placeKey, *placeName;
+
+@property (nonatomic, strong) NSString *adapterAppID;//adapterAppID 1->娱汇  3->娱通
 
 + (AdminInfo *)shareInfo;
 

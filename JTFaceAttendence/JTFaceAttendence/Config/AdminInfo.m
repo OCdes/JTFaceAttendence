@@ -57,6 +57,14 @@ static AdminInfo *_instance = nil;
     return [USER_DEFAULTS objectForKey:@"placeKey"];
 }
 
+- (BOOL)hasAgree {
+    return [USER_DEFAULTS boolForKey:@"hasAgree"];
+}
+
+- (void)setHasAgree:(BOOL)hasAgree {
+    [USER_DEFAULTS setBool:hasAgree forKey:@"hasAgree"];
+}
+
 - (void)setPlaceName:(NSString *)placeName {
     [USER_DEFAULTS setObject:placeName ? placeName : @"" forKey:@"placeName"];
 }
@@ -64,6 +72,15 @@ static AdminInfo *_instance = nil;
 - (NSString *)placeName {
     return [USER_DEFAULTS objectForKey:@"placeName"];
 }
+
+- (NSString *)adapterAppID {
+    return [USER_DEFAULTS objectForKey:@"adapterAppID"];
+}
+
+- (void)setAdapterAppID:(NSString *)adapterAppID {
+    [USER_DEFAULTS setObject:adapterAppID ? adapterAppID : @"" forKey:@"adapterAppID"];
+}
+
 
 + (AdminInfo *)shareInfo {
     static dispatch_once_t onceToken;

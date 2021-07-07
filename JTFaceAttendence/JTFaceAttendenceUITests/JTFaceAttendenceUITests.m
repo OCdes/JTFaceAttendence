@@ -2,7 +2,7 @@
 //  JTFaceAttendenceUITests.m
 //  JTFaceAttendenceUITests
 //
-//  Created by lj on 2021/6/17.
+//  Created by 袁炳生 on 2021/7/7.
 //
 
 #import <XCTest/XCTest.h>

@@ -29,7 +29,6 @@ static ConfigManager *_cm = nil;
     if (![[FaceSDKManager sharedInstance] canWork]) {
         NSLog(@"当前鉴权失败");
     } else {
-        [[FaceSDKManager sharedInstance] initCollect];
         [self initConfig];
     }
     [AdminInfo shareInfo].token = @"123456778";
@@ -41,9 +40,6 @@ static ConfigManager *_cm = nil;
 
 - (void)initConfig {
     // 初始化SDK配置参数，可使用默认配置
-    [USER_DEFAULTS setObject:@(YES) forKey:@"SoundMode"];
-    [USER_DEFAULTS setObject:@(YES) forKey:@"LiveMode"];
-    [USER_DEFAULTS setObject:@(NO) forKey:@"ByOrder"];
     // 设置最小检测人脸阈值
     [[FaceSDKManager sharedInstance] setMinFaceSize:200];
     // 设置截取人脸图片高
