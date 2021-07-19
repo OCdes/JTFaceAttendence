@@ -10,12 +10,20 @@
 #import "NSString+Tool.h"
 #import "JTFaceImageAttendenceManager.h"
 #import "UDPSocketManager.h"
+
+@interface AttendenceViewModel ()
+
+@property (nonatomic, strong) UDPSocketManager *manager;
+
+@end
+
 @implementation AttendenceViewModel
 
 - (instancetype)init {
     if (self = [super init]) {
         self.suceessSubject = [RACSubject subject];
         self.failureSubject = [RACSubject subject];
+        self.udpSubject = [RACSubject subject];
     }
     return self;
 }
@@ -50,11 +58,7 @@
             NSDictionary *data = responseDict[@"data"];
             if ([num isEqualToNumber:@(0)]) {
                 if ([[AdminInfo shareInfo].adapterAppID intValue] == 1) {
-                    uint16_t port = [[data objectForKey:@"port"] intValue];
-                    NSString *post = [data objectForKey:@"host"];
-                    NSString *content = [data objectForKey:@"content"];
-                    UDPSocketManager *manager = [[UDPSocketManager alloc] initUDPSocketBindID:port];
-                    [manager sendContentStr:content toHost:post];
+                    [self.udpSubject sendNext:data];
                 } else {
                     EmpInfoModel *mo = [EmpInfoModel mj_objectWithKeyValues:data];
                     mo.img = imgshow.successImage;

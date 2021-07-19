@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AttendenceViewModel : NSObject
 
-@property (nonatomic, strong) RACSubject *suceessSubject, *failureSubject;
+@property (nonatomic, strong) RACSubject *suceessSubject, *failureSubject, *udpSubject;
 
 - (void)requestAttendence;
 

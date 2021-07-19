@@ -12,8 +12,8 @@
 #import "AttendenceViewModel.h"
 #import "EmpCard.h"
 #import "AudioManager.h"
-
-@interface VedioCheckViewController () <CaptureDataOutputProtocol> {
+#import "GCDAsyncUdpSocket.h"
+@interface VedioCheckViewController () <CaptureDataOutputProtocol, GCDAsyncUdpSocketDelegate> {
     CGRect rectFrame;
     BOOL isPaint;
     UIImageView * newImage;
@@ -30,6 +30,10 @@
 @property (nonatomic, strong) UIView *maskView;
 
 @property (nonatomic, strong) AttendenceViewModel *viewModel;
+
+//@property (nonatomic, strong) UDPSocketManager *manager;
+
+@property (nonatomic, strong) GCDAsyncUdpSocket *sendSocket;
 
 @end
 
@@ -93,8 +97,55 @@
         [self setStatusText:x status:NO];
         [[AudioManager shareInstance] attendenceFailuer];
     }];
+    
+    [self.viewModel.udpSubject subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
+        [self udpRequestWithDict:x];
+    }];
+    
     [self setNav];
     [self initView];
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
+    NSString *contentStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:[contentStr componentsSeparatedByString:@"#"]];
+    [arr removeObject:@""];
+    if (arr.count) {
+        NSString *code = [NSString stringWithFormat:@"%@",arr[0]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([code isEqualToString:@"00000"]) {
+                EmpInfoModel *mo = [EmpInfoModel new];
+                mo.empName = arr[1];
+                mo.empDepartmentName = arr[2];
+                [JTFaceImageAttendenceManager sharedInstance].lastEmpModel = mo;
+                self.empNameLa.text = [NSString stringWithFormat:@"姓名:%@",mo.empName];
+                self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",mo.empDepartmentName];
+                
+                self.timeLa.text = [NSString stringWithFormat:@"时间:%@",[self->formatter stringFromDate:[NSDate date]]];
+                [self setStatusText:arr.lastObject status:YES];
+                [[AudioManager shareInstance] attendenceSuccess];
+            } else {
+                [self setStatusText:arr.lastObject status:NO];
+                [[AudioManager shareInstance] attendenceFailuer];
+            }
+        });
+    } else {
+        
+    }
+}
+
+- (void)udpRequestWithDict:(NSDictionary *)data {
+    uint16_t port = [[data objectForKey:@"port"] intValue];
+    NSString *post = [data objectForKey:@"host"];
+    NSString *content = [data objectForKey:@"content"];
+    NSError *error = nil;
+    [self.sendSocket bindToPort:port error:&error];
+    if (error == nil) {
+        [self.sendSocket beginReceiving:nil];
+        [self.sendSocket sendData:[content dataUsingEncoding:NSUTF8StringEncoding] toHost:post port:port withTimeout:-1 tag:0];
+    }
+    
 }
 
 - (void)setStatusText:(NSString *)msg status:(BOOL)sucess {
@@ -107,12 +158,12 @@
         self.statusLa.text = [NSString stringWithFormat:@"%@",msg];
         self.statusLa.textColor = HEX_COLOR(@"#e4240c");
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3*NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.statusLa.text = @"精特考勤";
-            self.statusLa.textColor = HEX_COLOR(@"#ffffff");
-        });
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3*NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            self.statusLa.text = @"精特考勤";
+//            self.statusLa.textColor = HEX_COLOR(@"#ffffff");
+//        });
+//    });
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -261,7 +312,7 @@
     
     CGFloat rectWidth = 480;//kScreenWidth*0.625
     CGFloat rectHeight = 596;
-    rectFrame = CGRectMake((kScreenWidth-480)/2, 98, rectWidth, rectHeight);
+    rectFrame = CGRectMake((kScreenWidth-480)/2, 30, rectWidth, rectHeight);
     // 初始化相机处理类
     self.videoCapture = [[BDFaceVideoCaptureDevice alloc] init];
     self.videoCapture.delegate = self;
@@ -311,26 +362,29 @@
     self.placeNameLa.text = [AdminInfo shareInfo].placeName;
     [self.view addSubview:self.placeNameLa];
     
-    UIImageView *infoV = [[UIImageView alloc] initWithFrame:CGRectMake(borderRect.origin.x, CGRectGetMaxY(borderRect)+37, borderRect.size.width, 136)];//empInfobg
+    UIImageView *infoV = [[UIImageView alloc] initWithFrame:CGRectMake(borderRect.origin.x, CGRectGetMaxY(borderRect)+37, borderRect.size.width, 216)];//empInfobg
     infoV.image = [UIImage imageNamed:@"empInfobg"];
     infoV.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:infoV];
     
-    self.empNameLa = [[UILabel alloc] initWithFrame:CGRectMake(66, 51, borderRect.size.width/2, 25)];
+    self.empNameLa = [[UILabel alloc] initWithFrame:CGRectMake(66, 61, borderRect.size.width/2, 25)];
     self.empNameLa.textColor = HEX_COLOR(@"#ffffff");
     self.empNameLa.text = @"姓名：";
     self.empNameLa.font = [UIFont boldSystemFontOfSize:16];
     [infoV addSubview:self.empNameLa];
-    self.departmenLa = [[UILabel alloc] initWithFrame:CGRectMake(66, CGRectGetMaxY(self.empNameLa.frame), borderRect.size.width/2, 25)];
+    self.departmenLa = [[UILabel alloc] initWithFrame:CGRectMake(66, CGRectGetMaxY(self.empNameLa.frame)+10, borderRect.size.width/2, 25)];
     self.departmenLa.textColor = HEX_COLOR(@"#ffffff");
     self.departmenLa.text = @"部门：";
     self.departmenLa.font = [UIFont boldSystemFontOfSize:16];
     [infoV addSubview:self.departmenLa];
-    self.timeLa = [[UILabel alloc] initWithFrame:CGRectMake(66, CGRectGetMaxY(self.departmenLa.frame), borderRect.size.width/2, 25)];
+    self.timeLa = [[UILabel alloc] initWithFrame:CGRectMake(66, CGRectGetMaxY(self.departmenLa.frame)+10, borderRect.size.width/2, 25)];
     self.timeLa.textColor = HEX_COLOR(@"#ffffff");
     self.timeLa.font = [UIFont boldSystemFontOfSize:16];
     self.timeLa.text = @"考勤时间：";
     [infoV addSubview:self.timeLa];
+    
+    self.statusLa.frame = CGRectMake(66, CGRectGetMaxY(self.timeLa.frame)+5, borderRect.size.width/2, 40);
+    [infoV addSubview:self.statusLa];
     
     UILabel *deviceID = [[UILabel alloc] initWithFrame:CGRectMake(0, kScreenHeight-56, kScreenWidth, 56)];
     deviceID.textColor = HEX_COLOR(@"#ffffff");
@@ -349,31 +403,16 @@
 }
 
 - (void)setNav {
-    UIButton *menu = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 120, 40)];
-    menu.hidden = YES;
-    [menu setImage:[UIImage imageNamed:@"icon_guide2"] forState:UIControlStateNormal];
-    menu.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [menu addTarget:self action:@selector(profileShow) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menu];
-    
-    UIButton *addFace = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 120, 40)];
-    [addFace setImage:[UIImage imageNamed:@"icon_guide3"] forState:UIControlStateNormal];
-    addFace.hidden = YES;
-    addFace.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [addFace addTarget:self action:@selector(registFaceID) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:addFace];
     
     UILabel *titleLa = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth-240, 40)];
-    titleLa.font = [UIFont boldSystemFontOfSize:25];
+    titleLa.font = [UIFont boldSystemFontOfSize:32];
     titleLa.textColor = [UIColor whiteColor];
-    titleLa.text = @"精特考勤";
-    titleLa.textAlignment = NSTextAlignmentCenter;
     titleLa.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.5].CGColor;
     titleLa.layer.shadowOffset = CGSizeZero;
     titleLa.layer.shadowOpacity = 1;
     titleLa.layer.shadowRadius = 5;
     self.statusLa = titleLa;
-    self.navigationItem.titleView = self.statusLa;
+//    self.navigationItem.titleView = self.statusLa;
 }
 
 - (void)registFaceID {
@@ -444,6 +483,15 @@
 
 - (void)warningStatus:(WarningStatus)status warning:(NSString *)warning conditionMeet:(BOOL)meet{
     [self warningStatus:status warning:warning];
+}
+
+#pragma mark -Lazyload
+
+- (GCDAsyncUdpSocket *)sendSocket {
+    if (!_sendSocket) {
+        _sendSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    }
+    return _sendSocket;
 }
 
 @end

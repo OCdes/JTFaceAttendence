@@ -10,11 +10,23 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol UDPManagerDelegate <NSObject>
+
+- (void)udpManagerDidReceiveData:(NSString *)contentStr;
+
+@end
+
 @interface UDPSocketManager : NSObject
 
-- (instancetype)initUDPSocketBindID:(uint16_t )port;
+@property (nonatomic, weak) id<UDPManagerDelegate> delegate;
+
+- (instancetype)initUDPSocket;
+
+- (void)bindPort:(uint16_t)port;
 
 - (void)sendContentStr:(NSString *)str toHost:(NSString *)host;
+
+@property (nonatomic, strong) void(^udpResultBlock)(NSString *contentStr);
 
 @end
 

@@ -56,17 +56,20 @@
         NSDictionary *dataDict = (NSDictionary *)[dict objectForKey:@"data"];
         if (![code isEqualToNumber:@(0)]) {
             [SVProgressHUD showErrorWithStatus:msg];
+            [AdminInfo shareInfo].placeKey = @"";
+            [AdminInfo shareInfo].placeName = @"";
+            [AdminInfo shareInfo].adapterAppID = @"";
         } else {
             [AdminInfo shareInfo].placeKey = [dataDict objectForKey:@"appKey"];
             [AdminInfo shareInfo].placeName = [dataDict objectForKey:@"placeName"];
             [AdminInfo shareInfo].adapterAppID = [dataDict objectForKey:@"adapterAppID"];
-            if ([AdminInfo shareInfo].hasAgree) {
-                [self enterHome];
-            } else {
-                [self agreenmentAlert];
-            }
+        }
+        if ([AdminInfo shareInfo].hasAgree) {
+            [self enterHome];
+        } else {
             [self agreenmentAlert];
         }
+        [self agreenmentAlert];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [SVProgressHUD dismiss];
         NSLog(@"%@",error.localizedDescription);

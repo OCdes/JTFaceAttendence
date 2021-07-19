@@ -18,17 +18,20 @@
 
 @implementation UDPSocketManager
 
-- (instancetype)initUDPSocketBindID:(uint16_t )port {
+- (instancetype)initUDPSocket {
     if (self = [super init]) {
-        self.sendPort = port;
-        self.sendSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
-        NSError *error = nil;
-        [self.sendSocket bindToPort:port error:&error];
-        if (error) {
-            DLog(@"%@",error.localizedDescription);
-        }
+        _sendSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     }
     return self;
+}
+
+- (void)bindPort:(uint16_t)port {
+    self.sendPort = port;
+    NSError *error = nil;
+    [self.sendSocket bindToPort:port error:&error];
+    if (error) {
+        DLog(@"%@",error.localizedDescription);
+    }
 }
 
 - (void)sendContentStr:(NSString *)str toHost:(NSString *)host {
@@ -41,6 +44,9 @@
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError *)error {
+    if (self.udpResultBlock) {
+        self.udpResultBlock(@"UDP服务连接失败");
+    }
     DLog(@"%@",error.localizedDescription);
 }
 
@@ -49,11 +55,23 @@
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
+    if (self.udpResultBlock) {
+        self.udpResultBlock(@"UDP数据发送失败");
+    }
     DLog(@"%@",error);
 }
 
+
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
+    if (_delegate && [_delegate respondsToSelector:@selector(udpManagerDidReceiveData:)]) {
+        [_delegate udpManagerDidReceiveData:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+    }
     DLog(@"%@",filterContext);
+}
+
+- (void)dealloc {
+    [self.sendSocket close];
+    _sendSocket = nil;
 }
 
 @end
