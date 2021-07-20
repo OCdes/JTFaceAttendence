@@ -69,9 +69,12 @@
         } else {
             [self agreenmentAlert];
         }
-        [self agreenmentAlert];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [SVProgressHUD dismiss];
+        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        [AdminInfo shareInfo].placeKey = @"";
+        [AdminInfo shareInfo].placeName = @"";
+        [AdminInfo shareInfo].adapterAppID = @"";
         NSLog(@"%@",error.localizedDescription);
     }];
 }

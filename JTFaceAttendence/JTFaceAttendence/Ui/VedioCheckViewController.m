@@ -174,9 +174,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.hasFinished = NO;
-    self.videoCapture.runningStatus = YES;
-    [self.videoCapture startSession];
+    if ([AdminInfo shareInfo].placeKey.length) {
+        self.hasFinished = NO;
+        self.videoCapture.runningStatus = YES;
+        [self.videoCapture startSession];
+    } else {
+        self.hasFinished = YES;
+        self.videoCapture.runningStatus = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -312,7 +317,7 @@
     
     CGFloat rectWidth = 480;//kScreenWidth*0.625
     CGFloat rectHeight = 596;
-    rectFrame = CGRectMake((kScreenWidth-480)/2, 30, rectWidth, rectHeight);
+    rectFrame = CGRectMake((kScreenWidth-480)/2, 40, rectWidth, rectHeight);
     // 初始化相机处理类
     self.videoCapture = [[BDFaceVideoCaptureDevice alloc] init];
     self.videoCapture.delegate = self;
@@ -459,6 +464,17 @@
         weakSelf.displayImageView.image = image;
     });
     [self faceProcesss:image];
+}
+
+- (UIImage *)addFilterToImage:(UIImage *)image {
+    UIImageView *imgv = [[UIImageView alloc] initWithFrame:rectFrame];
+    imgv.image = image;
+    CIImage *inputImg = [CIImage imageWithCGImage:imgv.image.CGImage];
+    CIFilter *filter = [CIFilter filterWithName:@"CIColorControls"];
+    [filter setDefaults];
+    [filter setValue:inputImg forKey:@"inputImage"];
+    UIImage *outImge = [UIImage imageWithCIImage:filter.outputImage];
+    return outImge;
 }
 
 - (void)captureError {
