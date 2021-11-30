@@ -2943,7 +2943,7 @@ enum GCDAsyncUdpSocketConfig
 	return result;
 }
 
-- (BOOL)bindToAddress:(NSData *)localAddr error:(NSError **)errPtr
+- (BOOL)zbindToAddress:(NSData *)localAddr error:(NSError **)errPtr
 {
 	__block BOOL result = NO;
 	__block NSError *err = nil;

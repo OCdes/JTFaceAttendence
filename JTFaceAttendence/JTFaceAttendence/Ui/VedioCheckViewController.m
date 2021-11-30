@@ -15,7 +15,7 @@
 #import "GCDAsyncUdpSocket.h"
 @interface VedioCheckViewController () <CaptureDataOutputProtocol, GCDAsyncUdpSocketDelegate> {
     CGRect rectFrame;
-    BOOL isPaint;
+    BOOL isPaint, isBindUDP;
     UIImageView * newImage;
     NSDateFormatter *formatter;
 }
@@ -52,6 +52,7 @@
     } else {
         self.videoCapture.delegate = self;
     }
+    
 }
 
 - (void)warningStatus:(WarningStatus)status warning:(NSString *)warning
@@ -95,6 +96,9 @@
     [self.viewModel.failureSubject subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         [self setStatusText:x status:NO];
+        self.empNameLa.text = [NSString stringWithFormat:@"姓名:%@",@""];
+        self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",@""];
+        self.timeLa.text = [NSString stringWithFormat:@"时间:%@",@""];
         [[AudioManager shareInstance] attendenceFailuer];
     }];
     
@@ -126,25 +130,78 @@
                 [self setStatusText:arr.lastObject status:YES];
                 [[AudioManager shareInstance] attendenceSuccess];
             } else {
+                if (arr.count > 2 ) {
+                    EmpInfoModel *mo = [EmpInfoModel new];
+                    mo.empName = arr[1];
+                    mo.empDepartmentName = arr[2];
+                    [JTFaceImageAttendenceManager sharedInstance].lastEmpModel = mo;
+                    self.empNameLa.text = [NSString stringWithFormat:@"姓名:%@",mo.empName];
+                    self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",mo.empDepartmentName];
+                    self.timeLa.text = [NSString stringWithFormat:@"时间:%@",[self->formatter stringFromDate:[NSDate date]]];
+                } else {
+                    self.empNameLa.text = [NSString stringWithFormat:@"姓名:%@",@""];
+                    self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",@""];
+                    self.timeLa.text = [NSString stringWithFormat:@"时间:%@",@""];
+                }
                 [self setStatusText:arr.lastObject status:NO];
                 [[AudioManager shareInstance] attendenceFailuer];
             }
         });
     } else {
-        
+        [self setStatusText:@"已识别人脸，但未能返回考勤信息" status:NO];
+        [[AudioManager shareInstance] attendenceFailuer];
     }
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setStatusText:@"打卡信息已发送，请等待结果" status:NO];
+    });
+}
+
+- (void)udpSocketDidClose:(GCDAsyncUdpSocket *)sock withError:(NSError  * _Nullable)error {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setStatusText:@"UDP连接已关闭，请联系管理员" status:NO];
+    });
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError * _Nullable)error {
+    [self setStatusText:error.localizedDescription status:NO];
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setStatusText:@"UDP服务器已连接" status:YES];
+    });
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setStatusText:error.localizedDescription status:YES];
+    });
 }
 
 - (void)udpRequestWithDict:(NSDictionary *)data {
     uint16_t port = [[data objectForKey:@"port"] intValue];
     NSString *post = [data objectForKey:@"host"];
     NSString *content = [data objectForKey:@"content"];
-    NSError *error = nil;
-    [self.sendSocket bindToPort:port error:&error];
-    if (error == nil) {
-        [self.sendSocket beginReceiving:nil];
-        [self.sendSocket sendData:[content dataUsingEncoding:NSUTF8StringEncoding] toHost:post port:port withTimeout:-1 tag:0];
+    
+    if (!isBindUDP) {
+        NSError *error = nil;
+        self.sendSocket.delegate = self;
+        [self.sendSocket bindToPort:port error:&error];
+        if (error == nil) {
+            [self.sendSocket beginReceiving:nil];
+            [self.sendSocket sendData:[content dataUsingEncoding:NSUTF8StringEncoding] toHost:post port:port withTimeout:5 tag:0];
+            isBindUDP = YES;
+        } else {
+            [self setStatusText:error.localizedDescription status:NO];
+            isBindUDP = NO;
+        }
+    } else {
+        [self.sendSocket sendData:[content dataUsingEncoding:NSUTF8StringEncoding] toHost:post port:port withTimeout:5 tag:0];
     }
+    
     
 }
 
@@ -389,6 +446,7 @@
     [infoV addSubview:self.timeLa];
     
     self.statusLa.frame = CGRectMake(66, CGRectGetMaxY(self.timeLa.frame)+5, borderRect.size.width/2, 40);
+    self.statusLa.adjustsFontSizeToFitWidth = YES;
     [infoV addSubview:self.statusLa];
     
     UILabel *deviceID = [[UILabel alloc] initWithFrame:CGRectMake(0, kScreenHeight-56, kScreenWidth, 56)];
@@ -505,7 +563,7 @@
 
 - (GCDAsyncUdpSocket *)sendSocket {
     if (!_sendSocket) {
-        _sendSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+        _sendSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];//dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
     }
     return _sendSocket;
 }
