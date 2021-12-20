@@ -284,13 +284,13 @@ typedef NS_ENUM(NSUInteger, TrackResultCode) {
 /**
  * 是否开启静默活体，默认false
  */
-// - (void)setIsCheckSilentLive:(BOOL)isCheck;
+ - (void)setIsCheckSilentLive:(BOOL)isCheck;
 
 /**
  * 静默活体阈值配置，默认0.8。
  * 大于阈值返回图片，低于阈值返回未检测到人脸
  */
-// - (void)setSilentLiveThreshold:(CGFloat)thr ;
+ - (void)setSilentLiveThreshold:(CGFloat)thr ;
 
 /**
  * 是否开启口罩检测，非动作活体检测模型true，动作活体检测模型false

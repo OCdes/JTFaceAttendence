@@ -201,13 +201,12 @@
     } else {
         [self.sendSocket sendData:[content dataUsingEncoding:NSUTF8StringEncoding] toHost:post port:port withTimeout:5 tag:0];
     }
-    
-    
 }
 
 - (void)setStatusText:(NSString *)msg status:(BOOL)sucess {
     self.hasFinished = NO;
     [self.videoCapture startSession];
+    [[IDLFaceLivenessManager sharedInstance] startInitial];
     if (sucess) {
         self.statusLa.text = [NSString stringWithFormat:@"%@",msg];
         self.statusLa.textColor = HEX_COLOR(@"#bef467");
@@ -215,18 +214,15 @@
         self.statusLa.text = [NSString stringWithFormat:@"%@",msg];
         self.statusLa.textColor = HEX_COLOR(@"#e4240c");
     }
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3*NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            self.statusLa.text = @"精特考勤";
-//            self.statusLa.textColor = HEX_COLOR(@"#ffffff");
-//        });
-//    });
+    [[IDLFaceLivenessManager sharedInstance] livenesswithList:[self actionList] order:NO numberOfLiveness:1];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     self.hasFinished = YES;
     self.videoCapture.runningStatus = NO;
+    [IDLFaceLivenessManager.sharedInstance reset];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -239,6 +235,16 @@
         self.hasFinished = YES;
         self.videoCapture.runningStatus = NO;
     }
+    [[IDLFaceLivenessManager sharedInstance] startInitial];
+    [[IDLFaceLivenessManager sharedInstance] livenesswithList:[self actionList] order:NO numberOfLiveness:1];
+    BDFaceLivingConfigModel.sharedInstance.numOfLiveness = 1;
+}
+
+- (NSArray *)actionList {
+    NSArray * arr = @[@(LivenessActionTypeLiveEye), @(LivenessActionTypeLiveYawLeft), @(LivenessActionTypeLiveYawRight),@(LivenessActionTypeLivePitchUp),@(LivenessActionTypeLivePitchDown),@(LivenessActionTypeLiveMouth),@(LivenessActionTypeLiveYaw)];
+    int index = arc4random()%5;
+    NSNumber *n = arr[index];
+    return @[n];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -280,7 +286,6 @@
                     [[BDFaceImageShow sharedInstance] setSuccessImage:bestImage.originalImage];
                     [[BDFaceImageShow sharedInstance] setSilentliveScore:bestImage.silentliveScore];
                     [self.viewModel requestAttendence];
-                    
                 }
                 break;
             }
@@ -478,37 +483,16 @@
 //    self.navigationItem.titleView = self.statusLa;
 }
 
-- (void)registFaceID {
-    if ([AdminInfo shareInfo].token.length) {
-        NSNumber *LiveMode = [[NSUserDefaults standardUserDefaults] objectForKey:@"LiveMode"];
-        if (LiveMode.boolValue){
-            [self faceLiveness];
-        } else {
-            [self faceDetect];
-        }
-    } else {
-        
-    }
-    
-    
-}
-
-- (void)faceLiveness {
-   
-}
-
-- (void)faceDetect {
-    
-}
-
 #pragma mark - Notification
 
 - (void)onAppWillResignAction {
     _hasFinished = YES;
+    [IDLFaceLivenessManager.sharedInstance reset];
 }
 
 - (void)onAppBecomeActive {
     _hasFinished = NO;
+    [[IDLFaceLivenessManager sharedInstance] livenesswithList:[self actionList] order:NO numberOfLiveness:1];
 }
 
 #pragma mark - CaptureDataOutputProtocol
