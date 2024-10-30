@@ -6,7 +6,6 @@
 //
 
 #import "AppDelegate.h"
-#import "VedioCheckViewController.h"
 #import "ConfigManager.h"
 #import "SettingLoadingVC.h"
 @interface AppDelegate ()

@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)registerSDK;
 
+- (void)initConfig;
+
 @end
 
 NS_ASSUME_NONNULL_END

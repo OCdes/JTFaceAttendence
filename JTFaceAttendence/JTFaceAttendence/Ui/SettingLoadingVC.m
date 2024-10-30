@@ -7,8 +7,13 @@
 
 #import "SettingLoadingVC.h"
 #import "NSString+Tool.h"
-#import "VedioCheckViewController.h"
 #import "BDFaceAgreementViewController.h"
+#import "NoLivenessVedioCheckVC.h"
+#import "ConfigManager.h"
+#import "BDFaceDetectionViewController.h"
+#import "BDFaceLivenessViewController.h"
+#import "BDFaceLivingConfigModel.h"
+#import "LivenessVedioCheckVC.h"
 @interface SettingLoadingVC ()
 
 @property (nonatomic, strong) UIImageView *launchImgView;
@@ -59,11 +64,14 @@
             [AdminInfo shareInfo].placeKey = @"";
             [AdminInfo shareInfo].placeName = @"";
             [AdminInfo shareInfo].adapterAppID = @"";
+            [AdminInfo shareInfo].enableLiveness = @"1";
         } else {
             [AdminInfo shareInfo].placeKey = [dataDict objectForKey:@"appKey"];
             [AdminInfo shareInfo].placeName = [dataDict objectForKey:@"placeName"];
             [AdminInfo shareInfo].adapterAppID = [dataDict objectForKey:@"adapterAppID"];
+            [AdminInfo shareInfo].enableLiveness = NSStringFormate(@"%@",[dataDict objectForKey:@"livingBody"]);
         }
+        [[ConfigManager manager] initConfig];
         if ([AdminInfo shareInfo].hasAgree) {
             [self enterHome];
         } else {
@@ -75,6 +83,7 @@
         [AdminInfo shareInfo].placeKey = @"";
         [AdminInfo shareInfo].placeName = @"";
         [AdminInfo shareInfo].adapterAppID = @"";
+        [AdminInfo shareInfo].enableLiveness = @"1";
         NSLog(@"%@",error.localizedDescription);
     }];
 }
@@ -86,7 +95,16 @@
 }
 
 - (void)enterHome {
-    APPWINDOW.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:[[VedioCheckViewController alloc] init]];
+    if ([[AdminInfo shareInfo].enableLiveness isEqualToString:@"1"]) {
+        LivenessVedioCheckVC *vc = [[LivenessVedioCheckVC alloc] init];
+        BDFaceLivingConfigModel* model = [BDFaceLivingConfigModel sharedInstance];
+        model.numOfLiveness = 1;
+        [vc livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
+        APPWINDOW.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:vc];
+    } else {
+        APPWINDOW.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:[[NoLivenessVedioCheckVC alloc] init]];
+    }
+    
 }
 
 /*

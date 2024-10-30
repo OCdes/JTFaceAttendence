@@ -6,7 +6,7 @@
 //
 
 #import "ConfigManager.h"
-#import "BDFaceAdjustParamsTool.h"
+
 
 static ConfigManager *_cm = nil;
 @implementation ConfigManager
@@ -29,7 +29,7 @@ static ConfigManager *_cm = nil;
     if (![[FaceSDKManager sharedInstance] canWork]) {
         NSLog(@"当前鉴权失败");
     } else {
-        [self initConfig];
+//        [self initConfig];
     }
 //    [AdminInfo shareInfo].token = @"123456778";
 //    [AdminInfo shareInfo].emp_name = @"张坤";
@@ -41,11 +41,11 @@ static ConfigManager *_cm = nil;
 - (void)initConfig {
     // 初始化SDK配置参数，可使用默认配置
     // 设置最小检测人脸阈值
-    [[FaceSDKManager sharedInstance] setMinFaceSize:200];
+//    [[FaceSDKManager sharedInstance] setMinFaceSize:200];
     // 设置截取人脸图片高
-    [[FaceSDKManager sharedInstance] setCropFaceSizeWidth:480];
+//    [[FaceSDKManager sharedInstance] setCropFaceSizeWidth:480];
     // 设置截取人脸图片宽
-    [[FaceSDKManager sharedInstance] setCropFaceSizeHeight:640];
+//    [[FaceSDKManager sharedInstance] setCropFaceSizeHeight:640];
     // 设置人脸遮挡阀值
     [[FaceSDKManager sharedInstance] setOccluThreshold:0.9];
     // 设置亮度阀值
@@ -63,18 +63,14 @@ static ConfigManager *_cm = nil;
     [[FaceSDKManager sharedInstance] setMaxCropImageNum:3];
     // 设置超时时间
     [[FaceSDKManager sharedInstance] setConditionTimeout:3];
-    // 设置开启口罩检测，非动作活体检测可以采集戴口罩图片
-    [[FaceSDKManager sharedInstance] setIsCheckMouthMask:NO];
     // 设置图片加密类型，type=0 基于base64 加密；type=1 基于百度安全算法加密
     [[FaceSDKManager sharedInstance] setImageEncrypteType:0];
     // 设置人脸过远框比例
-    [[FaceSDKManager sharedInstance] setMinRect:0.4];
+    [[FaceSDKManager sharedInstance] setMinRect:0.2];
     // 初始化SDK功能函数
     [[FaceSDKManager sharedInstance] initCollect];
-    //开启静默活体
-    [[FaceSDKManager sharedInstance] setIsCheckSilentLive:YES];
-    [[FaceSDKManager sharedInstance] setSilentLiveThreshold:0.9];
-    [BDFaceAdjustParamsTool setDefaultConfig];
+    
+    
 }
 
 @end

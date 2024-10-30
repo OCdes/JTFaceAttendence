@@ -81,6 +81,13 @@ static AdminInfo *_instance = nil;
     [USER_DEFAULTS setObject:adapterAppID ? adapterAppID : @"" forKey:@"adapterAppID"];
 }
 
+- (NSString *)enableLiveness {
+    return [USER_DEFAULTS objectForKey:@"enableLiveness"];
+}
+
+- (void)setEnableLiveness:(NSString *)enableLiveness {
+    return [USER_DEFAULTS setObject:enableLiveness forKey:@"enableLiveness"];
+}
 
 + (AdminInfo *)shareInfo {
     static dispatch_once_t onceToken;

@@ -21,7 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *placeKey, *placeName;
 
-@property (nonatomic, strong) NSString *adapterAppID;//adapterAppID 1->娱汇  3->娱通
+@property (nonatomic, strong) NSString *adapterAppID, *enableLiveness;//adapterAppID 1->娱汇  3->娱通
+
+
 
 + (AdminInfo *)shareInfo;
 
