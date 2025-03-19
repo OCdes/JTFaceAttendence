@@ -64,16 +64,11 @@
     titleLa.layer.shadowOpacity = 1;
     titleLa.layer.shadowRadius = 5;
     self.statusLa = titleLa;
-//    self.navigationItem.titleView = self.statusLa;
 }
 - (void)initView {
-//    // 初始化相机处理类
-//    self.videoCapture = [[BDFaceVideoCaptureDevice alloc] init];
-//    self.videoCapture.delegate = self;
     
     // 用于展示视频流的imageview
     self.displayImageView.frame = rectFrame;
-//    self.displayImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.view addSubview:self.displayImageView];
 
     // 提示label（遮挡等问题）
@@ -166,6 +161,7 @@
         self.timeLa.text = [NSString stringWithFormat:@"时间:%@",[self->formatter stringFromDate:[NSDate date]]];
         [self setStatusText:x status:YES];
         [[AudioManager shareInstance] attendenceSuccess];
+        [self selfReplayFunction];
     }];
     [self.viewModel.failureSubject subscribeNext:^(id  _Nullable x) {
         @strongify(self);
@@ -175,6 +171,7 @@
         self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",@""];
         self.timeLa.text = [NSString stringWithFormat:@"时间:%@",@""];
         [[AudioManager shareInstance] attendenceFailuer];
+        [self selfReplayFunction];
     }];
     
     [self.viewModel.udpSubject subscribeNext:^(id  _Nullable x) {
@@ -185,7 +182,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _isFinished = NO;
+    self.isFinished = NO;
     [[IDLFaceLivenessManager sharedInstance] startInitial];
 }
 
@@ -202,9 +199,10 @@
 
 - (void)onAppWillResignAction {
     [super onAppWillResignAction];
+    self.isFinished = YES;
     [IDLFaceLivenessManager.sharedInstance reset];
 }
-static int countDown = 5;
+static int countDown = 3;
 - (void)setIsFinished:(BOOL)isFinished {
     if (!isFinished) {
         self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_queue_create("com.jt.attendance", DISPATCH_QUEUE_CONCURRENT));
@@ -214,7 +212,7 @@ static int countDown = 5;
             if (countDown < 0) {
                 dispatch_cancel(self.timer);
                 self.timer = nil;
-                countDown = 5;
+                countDown = 3;
                 self->_isFinished = NO;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.empNameLa.text = @"姓名:";
@@ -373,22 +371,8 @@ static int countDown = 5;
                 }
                 break;
             }
-            case LivenessRemindCodePitchOutofDownRange:
-                [self warningStatus:PoseStatus warning:@"请略微抬头" conditionMeet:false];
-               
-                break;
-            case LivenessRemindCodePitchOutofUpRange:
-                [self warningStatus:PoseStatus warning:@"请略微低头" conditionMeet:false];
-               
-                break;
-            case LivenessRemindCodeYawOutofRightRange:
-                [self warningStatus:PoseStatus warning:@"请略微向右转头" conditionMeet:false];
-               
-                break;
-            case LivenessRemindCodeYawOutofLeftRange:
-                [self warningStatus:PoseStatus warning:@"请略微向左转头" conditionMeet:false];
-               
-                break;
+            
+            
             case LivenessRemindCodePoorIllumination:
                 [self warningStatus:CommonStatus warning:@"请使环境光线再亮些" conditionMeet:false];
                
@@ -397,18 +381,8 @@ static int countDown = 5;
                 [self warningStatus:CommonStatus warning:@"把脸移入框内" conditionMeet:false];
                
                 break;
-            case LivenessRemindCodeImageBlured:
-                [self warningStatus:PoseStatus warning:@"请晃动" conditionMeet:false];
-               
-                break;
-            case LivenessRemindCodeOcclusionLeftEye:
-                [self warningStatus:occlusionStatus warning:@"左眼有遮挡" conditionMeet:false];
-               
-                break;
-            case LivenessRemindCodeOcclusionRightEye:
-                [self warningStatus:occlusionStatus warning:@"右眼有遮挡" conditionMeet:false];
-               
-                break;
+            
+            
             case LivenessRemindCodeOcclusionNose:
                 [self warningStatus:occlusionStatus warning:@"鼻子有遮挡" conditionMeet:false];
                
@@ -453,34 +427,9 @@ static int countDown = 5;
                 [self warningStatus:CommonStatus warning:@"眨眨眼" conditionMeet:true];
                
                 break;
-            case LivenessRemindCodeLiveMouth:
-                [self warningStatus:CommonStatus warning:@"张张嘴" conditionMeet:true];
-               
-                break;
-            case LivenessRemindCodeLiveYawRight:
-                [self warningStatus:CommonStatus warning:@"向右缓慢转头" conditionMeet:true];
-               
-                break;
-            case LivenessRemindCodeLiveYawLeft:
-                [self warningStatus:CommonStatus warning:@"向左缓慢转头" conditionMeet:true];
-               
-                break;
-            case LivenessRemindCodeLivePitchUp:
-                [self warningStatus:CommonStatus warning:@"缓慢抬头" conditionMeet:true];
-               
-                break;
-            case LivenessRemindCodeLivePitchDown:
-                [self warningStatus:CommonStatus warning:@"缓慢低头" conditionMeet:true];
-               
-                break;
-            case LivenessRemindCodeSingleLivenessFinished:
-            {
-                [[IDLFaceLivenessManager sharedInstance] livenessProcessHandler:^(float numberOfLiveness, float numberOfSuccess, LivenessActionType currenActionType) {
-                    NSLog(@"Finished 非常好 %d %d %d", (int)numberOfLiveness, (int)numberOfSuccess, (int)currenActionType);
-                }];
-                [self warningStatus:CommonStatus warning:@"非常好" conditionMeet:true];
-            }
-                break;
+           
+            
+            
             case LivenessRemindCodeFaceIdChanged:
             {
                 [self warningStatus:CommonStatus warning:@"把脸移入框内" conditionMeet:true];
@@ -488,14 +437,15 @@ static int countDown = 5;
                 break;
             case LivenessRemindCodeVerifyInitError:
                 [self warningStatus:CommonStatus warning:@"验证失败"];
+                [[IDLFaceLivenessManager sharedInstance] reset];
                 break;
             case LivenessRemindCodeTimeout: {
                 // 时间超时，重置之前采集数据
-                [self selfReplayFunction];
+                [[IDLFaceLivenessManager sharedInstance] reset];
                 break;
             }
             case LivenessRemindActionCodeTimeout:{
-                [self selfReplayFunction];
+                [[IDLFaceLivenessManager sharedInstance] reset];
                 break;
             }
             case LivenessRemindCodeConditionMeet: {
@@ -515,7 +465,6 @@ static int countDown = 5;
 }
 
 - (void)setStatusText:(NSString *)msg status:(BOOL)sucess {
-//    [self selfReplayFunction];
     if (sucess) {
         self.statusLa.text = [NSString stringWithFormat:@"%@",msg];
         self.statusLa.textColor = HEX_COLOR(@"#bef467");

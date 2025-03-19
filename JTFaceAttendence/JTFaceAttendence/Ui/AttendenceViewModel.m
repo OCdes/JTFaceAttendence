@@ -49,7 +49,7 @@
         NSDictionary *dict = @{@"base64Image":imgDataStr,@"timestamp":intervalStr,@"nonceStr":nonceStr,@"placeKey":placeKey,@"sign":signStr};
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         NSLog(@"%@",[NSString stringWithFormat:@"%@%@",Base_Url,POST_FACEATTENDENCE]);
-        [manager POST:[NSString stringWithFormat:@"%@%@",Base_Url,POST_FACEATTENDENCE] parameters:dict headers:@{} progress:^(NSProgress * _Nonnull uploadProgress) {
+        [manager POST:[NSString stringWithFormat:@"%@%@",Base_Url,POST_FACEATTENDENCE] parameters:dict headers:@{@"content-type":@"application/x-www-form-urlencoded"} progress:^(NSProgress * _Nonnull uploadProgress) {
             
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSDictionary *responseDict = (NSDictionary *)responseObject;

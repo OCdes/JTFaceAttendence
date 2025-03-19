@@ -6,7 +6,7 @@
 //
 
 #import "ConfigManager.h"
-
+#import "BDFaceLivingConfigModel.h"
 
 static ConfigManager *_cm = nil;
 @implementation ConfigManager
@@ -70,6 +70,10 @@ static ConfigManager *_cm = nil;
     // 初始化SDK功能函数
     [[FaceSDKManager sharedInstance] initCollect];
     
+    [BDFaceLivingConfigModel.sharedInstance.liveActionArray addObject:@(FaceLivenessActionTypeLiveEye)];
+    
+    
+    BDFaceLivingConfigModel.sharedInstance.numOfLiveness = 1;
     
 }
 

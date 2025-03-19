@@ -118,12 +118,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // 用于播放视频流
-//    if (IS_IPHONE_X || IS_IPHONE_Xr || IS_IPHONE_Xs || IS_IPHONE_Xs_Max) {
-//        self.previewRect = CGRectMake(ScreenWidth*(1-scaleValueX)/2.0, ScreenHeight*(1-scaleValueX)/2.0, ScreenWidth*scaleValueX, ScreenHeight*scaleValueX);
-//    } else {
-//        self.previewRect = CGRectMake(ScreenWidth*(1-scaleValue)/2.0, ScreenHeight*(1-scaleValue)/2.0, ScreenWidth*scaleValue, ScreenHeight*scaleValue);
-//    }
-//    
+    if (IS_IPHONE_X || IS_IPHONE_Xr || IS_IPHONE_Xs || IS_IPHONE_Xs_Max) {
+        self.previewRect = CGRectMake(ScreenWidth*(1-scaleValueX)/2.0, ScreenHeight*(1-scaleValueX)/2.0, ScreenWidth*scaleValueX, ScreenHeight*scaleValueX);
+    } else {
+        self.previewRect = CGRectMake(ScreenWidth*(1-scaleValue)/2.0, ScreenHeight*(1-scaleValue)/2.0, ScreenWidth*scaleValue, ScreenHeight*scaleValue);
+    }
+    
     // 超时的view初始化，但是不添加到当前view内
     // 超时的最底层view，大小和屏幕大小一致，为了突出弹窗的view的效果，背景为灰色，0.7的透视度
     _timeOutMainView = [[UIView alloc] init];
@@ -196,13 +196,13 @@
     CGRect circleRect =CGRectMake(ScreenWidth*(1-scaleValue)/2.0 , 175*ScreenHeight/667, ScreenWidth*scaleValue, ScreenWidth*scaleValue);
     
     // 画圈和圆形遮罩
-//    self.detectRect = CGRectMake(circleRect.origin.x , circleRect.origin.y, circleRect.size.width, circleRect.size.height*5/4);
+    self.detectRect = CGRectMake(circleRect.origin.x , circleRect.origin.y, circleRect.size.width, circleRect.size.height*5/4);
     CGPoint centerPoint = CGPointMake(CGRectGetMidX(circleRect), CGRectGetMidY(circleRect));
     //创建一个View
     UIView *maskView = [[UIView alloc] initWithFrame:ScreenRect];
     maskView.backgroundColor = [UIColor whiteColor];
     maskView.alpha = 1;
-//    [self.view addSubview:maskView];
+    [self.view addSubview:maskView];
     //贝塞尔曲线 画一个带有圆角的矩形
     UIBezierPath *bpath = [UIBezierPath bezierPathWithRoundedRect:ScreenRect cornerRadius:0];
     //贝塞尔曲线 画一个圆形
@@ -211,16 +211,16 @@
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     shapeLayer.path = bpath.CGPath;
     // 添加图层蒙板
-//    maskView.layer.mask = shapeLayer;
+    maskView.layer.mask = shapeLayer;
     
-    //进度条view，活体检测页面
+    // 进度条view，活体检测页面
     CGRect circleProgressRect =  CGRectMake(CGRectGetMinX(circleRect) - 13.7, CGRectGetMinY(circleRect) - 13.7, CGRectGetWidth(circleRect) + (13.7 * 2), CGRectGetHeight(circleRect) + (13.7 * 2));
     self.circleProgressView = [[BDFaceCycleProgressView alloc] initWithFrame:circleProgressRect];
     
-    //动作活体动画
+    // 动作活体动画
     self.remindAnimationView = [[BDFaceRemindAnimationView alloc] initWithFrame:circleRect];
     
-    //提示框（动作）
+    // 提示框（动作）
     self.remindLabel = [[UILabel alloc] init];
     self.remindLabel.frame = CGRectMake(0, 103.3, ScreenWidth, 22);
     self.remindLabel.textAlignment = NSTextAlignmentCenter;
@@ -266,11 +266,11 @@
     UIImageView *logoImageView = [[UIImageView alloc] init];
     logoImageView.frame = CGRectMake(0, CGRectGetMaxY(self.view.frame) - 221, ScreenWidth, 221);
     logoImageView.image = [UIImage imageNamed:@"bg_bottom_pattern"];
-//    [self.view addSubview:logoImageView];
+    [self.view addSubview:logoImageView];
     
     // 设置logo，底部的位置和大小，实例化显示
     BDFaceLogoView* logoView = [[BDFaceLogoView alloc] initWithFrame:CGRectMake(0, (ScreenHeight-15-12), ScreenWidth, 12)];
-//    [self.view addSubview:logoView];
+    [self.view addSubview:logoView];
     
     // 监听重新返回APP
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppWillResignAction) name:UIApplicationWillResignActiveNotification object:nil];
@@ -284,23 +284,22 @@
      圆框：采集显示框（人脸应该放置的检测位置）
      绿色框：人脸最小框（通过最小框判定人脸是否过远，按照黄色框百分比：0.4宽）
      
-    UIImageView* circleImage= [[UIImageView alloc]init];
-    circleImage = [self creatRectangle:circleImage withRect:self.detectRect withcolor:[UIColor redColor]];
-    [self.view addSubview:circleImage];
-
-    UIImageView* previewImage= [[UIImageView alloc]init];
-    previewImage = [self creatRectangle:previewImage withRect:self.previewRect withcolor:[UIColor yellowColor]];
-    previewImage.backgroundColor = UIColor.yellowColor;
-    [self.view addSubview:previewImage];
-
-    UIImageView* detectImage= [[UIImageView alloc]init];
-    detectImage = [self creatRectangle:detectImage withRect:self.detectRect withcolor:[UIColor blueColor]];
-    [self.view addSubview:detectImage];
-
-    CGRect _minRect = CGRectMake(CGRectGetMinX(self.detectRect)+CGRectGetWidth(self.detectRect)*(1-[[FaceSDKManager sharedInstance] minRectScale])/2, CGRectGetMinY(self.detectRect)+CGRectGetWidth(self.detectRect)*(1-[[FaceSDKManager sharedInstance] minRectScale])/2, CGRectGetWidth(self.detectRect)*[[FaceSDKManager sharedInstance] minRectScale], CGRectGetWidth(self.detectRect)*[[FaceSDKManager sharedInstance] minRectScale]);
-    UIImageView* minImage= [[UIImageView alloc]init];
-    minImage = [self creatRectangle:minImage withRect:_minRect withcolor:[UIColor greenColor]];
-    [self.view addSubview:minImage];
+//    UIImageView* circleImage= [[UIImageView alloc]init];
+//    circleImage = [self creatRectangle:circleImage withRect:circleRect withcolor:[UIColor redColor]];
+//    [self.view addSubview:circleImage];
+//
+//    UIImageView* previewImage= [[UIImageView alloc]init];
+//    previewImage = [self creatRectangle:previewImage withRect:self.previewRect withcolor:[UIColor yellowColor]];
+//    [self.view addSubview:previewImage];
+//
+//    UIImageView* detectImage= [[UIImageView alloc]init];
+//    detectImage = [self creatRectangle:detectImage withRect:self.detectRect withcolor:[UIColor blueColor]];
+//    [self.view addSubview:detectImage];
+//
+//    CGRect _minRect = CGRectMake(CGRectGetMinX(self.detectRect)+CGRectGetWidth(self.detectRect)*(1-[[FaceSDKManager sharedInstance] minRectScale])/2, CGRectGetMinY(self.detectRect)+CGRectGetWidth(self.detectRect)*(1-[[FaceSDKManager sharedInstance] minRectScale])/2, CGRectGetWidth(self.detectRect)*[[FaceSDKManager sharedInstance] minRectScale], CGRectGetWidth(self.detectRect)*[[FaceSDKManager sharedInstance] minRectScale]);
+//    UIImageView* minImage= [[UIImageView alloc]init];
+//    minImage = [self creatRectangle:minImage withRect:_minRect withcolor:[UIColor greenColor]];
+//    [self.view addSubview:minImage];
      */
 }
 #pragma mark-绘框方法

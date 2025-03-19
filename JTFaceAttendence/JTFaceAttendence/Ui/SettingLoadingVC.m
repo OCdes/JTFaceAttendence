@@ -8,15 +8,18 @@
 #import "SettingLoadingVC.h"
 #import "NSString+Tool.h"
 #import "BDFaceAgreementViewController.h"
-#import "NoLivenessVedioCheckVC.h"
+
 #import "ConfigManager.h"
 #import "BDFaceDetectionViewController.h"
 #import "BDFaceLivenessViewController.h"
 #import "BDFaceLivingConfigModel.h"
 #import "LivenessVedioCheckVC.h"
+#import "NoLivenessVedioCheckVC.h"
 @interface SettingLoadingVC ()
 
 @property (nonatomic, strong) UIImageView *launchImgView;
+
+@property (nonatomic, strong) UIButton *reRequestInfo;
 
 @end
 
@@ -29,7 +32,15 @@
     self.launchImgView = [[UIImageView alloc] initWithFrame:APPWINDOW.bounds];
     self.launchImgView.image = [UIImage imageNamed:@"launchImage"];
     [self.view addSubview:self.launchImgView];
-    [self verifyPlacePad];
+    
+    self.reRequestInfo = [[UIButton alloc]  initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
+    [self.reRequestInfo setTitle:@"初始化网络连接失败,\n轻点重新尝试" forState:UIControlStateNormal];
+    self.reRequestInfo.titleLabel.numberOfLines = 2;
+    self.reRequestInfo.hidden = YES;
+    self.reRequestInfo.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.reRequestInfo.center = CGPointMake(self.view.center.x, kScreenHeight*2/3+50);
+    [self.reRequestInfo addTarget:self action:@selector(verifyPlacePad) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.reRequestInfo];
 }
 
 - (void)verifyPlacePad {
@@ -47,14 +58,16 @@
     NSString *secretKey = @"7dkc86acd1438f1";
     NSString *paramStr = [NSString stringWithFormat:@"%@%@%@",udid, intervalStr,nonceStr];
     NSString *signStr = [paramStr HmacSHA256WithSecretKey:secretKey];
+    NSString *version = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
     //参数处理+
-    NSDictionary *dict = @{@"deviceId":udid,@"timestamp":intervalStr,@"nonceStr":nonceStr,@"placeKey":placeKey,@"sign":signStr};
+    NSDictionary *dict = @{@"deviceId":udid,@"timestamp":intervalStr,@"nonceStr":nonceStr,@"placeKey":placeKey,@"sign":signStr,@"attendanceVersion":version};
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager POST:[NSString stringWithFormat:@"%@%@",Base_Url,POST_GETPLACEINFO] parameters:dict headers:@{} progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [SVProgressHUD dismiss];
         DLog(@"%@",responseObject);
+        self.reRequestInfo.hidden = YES;
         NSDictionary *dict = (NSDictionary *)responseObject;
         NSNumber *code = (NSNumber *)[dict objectForKey:@"code"];
         NSString *msg = (NSString *)[dict objectForKey:@"msg"];
@@ -78,14 +91,24 @@
             [self agreenmentAlert];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [SVProgressHUD dismiss];
-        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-        [AdminInfo shareInfo].placeKey = @"";
-        [AdminInfo shareInfo].placeName = @"";
-        [AdminInfo shareInfo].adapterAppID = @"";
-        [AdminInfo shareInfo].enableLiveness = @"1";
-        NSLog(@"%@",error.localizedDescription);
+        if (error.code == -1009) {
+            self.reRequestInfo.hidden = NO;
+        } else {
+            [SVProgressHUD dismiss];
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            [AdminInfo shareInfo].placeKey = @"";
+            [AdminInfo shareInfo].placeName = @"";
+            [AdminInfo shareInfo].adapterAppID = @"";
+            [AdminInfo shareInfo].enableLiveness = @"1";
+            NSLog(@"%@",error.localizedDescription);
+        }
+        
     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self verifyPlacePad];
 }
 
 - (void)agreenmentAlert {
@@ -96,11 +119,13 @@
 
 - (void)enterHome {
     if ([[AdminInfo shareInfo].enableLiveness isEqualToString:@"1"]) {
-        LivenessVedioCheckVC *vc = [[LivenessVedioCheckVC alloc] init];
+        LivenessVedioCheckVC* lvc = [[LivenessVedioCheckVC alloc] init];
         BDFaceLivingConfigModel* model = [BDFaceLivingConfigModel sharedInstance];
-        model.numOfLiveness = 1;
-        [vc livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
-        APPWINDOW.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:vc];
+        [lvc livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:lvc];
+        navi.navigationBarHidden = true;
+        navi.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:navi animated:YES completion:nil];
     } else {
         APPWINDOW.rootViewController = [[BaseNavigationController alloc] initWithRootViewController:[[NoLivenessVedioCheckVC alloc] init]];
     }
