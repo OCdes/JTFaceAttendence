@@ -49,7 +49,7 @@
     CGFloat rectHeight = rectWidth * 596/480;
     rectFrame = CGRectMake((kScreenWidth-rectWidth)/2, 40, rectWidth, rectHeight);
     self.previewRect = rectFrame;
-    self.detectRect = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    self.detectRect = rectFrame;//CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     [super viewDidLoad];
     [self setNav];
     [self initView];
@@ -234,7 +234,7 @@ static int countDown = 3;
     uint16_t port = [[data objectForKey:@"port"] intValue];
     NSString *post = [data objectForKey:@"host"];
     NSString *content = [data objectForKey:@"content"];
-    
+    DLog(@"%@--%hu--%@",post, port, content);
     if (!isBindUDP) {
         NSError *error = nil;
         self.sendSocket.delegate = self;
@@ -259,6 +259,7 @@ static int countDown = 3;
     if (arr.count) {
         NSString *code = [NSString stringWithFormat:@"%@",arr[0]];
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.isFinished = NO;
             if ([code isEqualToString:@"00000"]) {
                 EmpInfoModel *mo = [EmpInfoModel new];
                 mo.empName = arr[1];
@@ -270,6 +271,7 @@ static int countDown = 3;
                 self.timeLa.text = [NSString stringWithFormat:@"时间:%@",[self->formatter stringFromDate:[NSDate date]]];
                 [self setStatusText:arr.lastObject status:YES];
                 [[AudioManager shareInstance] attendenceSuccess];
+                [self selfReplayFunction];
             } else {
                 if (arr.count > 2 ) {
                     EmpInfoModel *mo = [EmpInfoModel new];
@@ -279,6 +281,7 @@ static int countDown = 3;
                     self.empNameLa.text = [NSString stringWithFormat:@"姓名:%@",mo.empName];
                     self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",mo.empDepartmentName];
                     self.timeLa.text = [NSString stringWithFormat:@"时间:%@",[self->formatter stringFromDate:[NSDate date]]];
+                    [self selfReplayFunction];
                 } else {
                     self.empNameLa.text = [NSString stringWithFormat:@"姓名:%@",@""];
                     self.departmenLa.text = [NSString stringWithFormat:@"部门:%@",@""];
@@ -286,23 +289,31 @@ static int countDown = 3;
                 }
                 [self setStatusText:arr.lastObject status:NO];
                 [[AudioManager shareInstance] attendenceFailuer];
+                [self selfReplayFunction];
             }
         });
     } else {
+        self.isFinished = NO;
         [self setStatusText:@"已识别人脸，但未能返回考勤信息" status:NO];
         [[AudioManager shareInstance] attendenceFailuer];
+        [self selfReplayFunction];
+        
     }
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.isFinished = NO;
         [self setStatusText:@"打卡信息已发送，请等待结果" status:NO];
+        [self selfReplayFunction];
     });
 }
 
 - (void)udpSocketDidClose:(GCDAsyncUdpSocket *)sock withError:(NSError  * _Nullable)error {
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.isFinished = NO;
         [self setStatusText:@"UDP连接已关闭，请联系管理员" status:NO];
+        [self selfReplayFunction];
     });
 }
 
@@ -319,6 +330,7 @@ static int countDown = 3;
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setStatusText:error.localizedDescription status:YES];
+        DLog(@"%@",error.localizedDescription)
     });
 }
 
@@ -481,6 +493,13 @@ static int countDown = 3;
         weakSelf.remindDetailLabel.hidden = NO;
         weakSelf.remindDetailLabel.text = warning;
     });
+}
+
+- (GCDAsyncUdpSocket *)sendSocket {
+    if (!_sendSocket) {
+        _sendSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];//dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+    }
+    return _sendSocket;
 }
 
 @end

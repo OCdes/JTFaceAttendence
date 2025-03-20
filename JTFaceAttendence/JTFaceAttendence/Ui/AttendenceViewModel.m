@@ -33,7 +33,13 @@
     if (imgshow.successImage) {
         //图像处理
         UIImage *simg = imgshow.successImage;
-        NSString *imgDataStr = [UIImageJPEGRepresentation(simg, 1) base64EncodedStringWithOptions:0];
+        NSData *imgData = UIImagePNGRepresentation(simg);
+        DLog(@"照片大小:%ld",imgData.length)
+        int scale = 1;
+        if (imgData.length > 2700000) {
+            scale = 2600000/imgData.length;
+        }
+        NSString *imgDataStr = [UIImageJPEGRepresentation(simg, scale) base64EncodedStringWithOptions:0];
         //日期处理
         NSDate *date = [NSDate date];
         NSTimeInterval interval = [date timeIntervalSince1970];
@@ -48,8 +54,10 @@
         //参数处理+
         NSDictionary *dict = @{@"base64Image":imgDataStr,@"timestamp":intervalStr,@"nonceStr":nonceStr,@"placeKey":placeKey,@"sign":signStr};
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        [manager.requestSerializer setValue:@"application/x-www-form-urlencoded;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+
         NSLog(@"%@",[NSString stringWithFormat:@"%@%@",Base_Url,POST_FACEATTENDENCE]);
-        [manager POST:[NSString stringWithFormat:@"%@%@",Base_Url,POST_FACEATTENDENCE] parameters:dict headers:@{@"content-type":@"application/x-www-form-urlencoded"} progress:^(NSProgress * _Nonnull uploadProgress) {
+        [manager POST:[NSString stringWithFormat:@"%@%@",Base_Url,POST_FACEATTENDENCE] parameters:dict headers:@{} progress:^(NSProgress * _Nonnull uploadProgress) {
             
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSDictionary *responseDict = (NSDictionary *)responseObject;
